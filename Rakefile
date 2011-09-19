@@ -1,17 +1,3 @@
-require './lib/mulberry.rb'
-
-namespace :mulberry do
-  desc "Scrapes the websites and updates data.json"
-  task :update do
-    Mulberry.update
-  end
-
-  desc "Deletes data and tmp files"
-  task :clean do
-    Mulberry.clean
-  end
-end
-
 namespace :applet do
   namespace :dev do
     desc "Symlinks the applet into $squeezeplay_path applet dir"
@@ -19,7 +5,7 @@ namespace :applet do
       if File.exists?(Applet.squeezeplay_applet_dir)
         puts "Already symlinked"
       else
-        ln_s File.expand_path("./lib/applet"), Applet.squeezeplay_applet_dir
+        ln_s File.expand_path("./applet"), Applet.squeezeplay_applet_dir
       end
     end
   end
@@ -29,16 +15,18 @@ namespace :applet do
     if ENV["device"].nil? || ENV["device"].empty?
       raise "Usage: rake applet:install device=HOSTNAME_OF_SQUEEZEPLAY_DEVICE"
     end
-    puts %x[scp -r -v #{APPLET_DIR}/* #{ENV['device']}:/usr/share/jive/applets/#{Applet.name}]
+    puts %x[scp -r -v #{Applet::DIR}/* #{ENV['device']}:/usr/share/jive/applets/#{Applet.name}]
   end
 end
 
 module Applet
+  DIR = File.expand_path(File.join(File.dirname(__FILE__), "applet"))
+  
   class << self
     # squeezeplay convention is to name the meta/applet files
     # $APPLET_NAMEmeta.lua etc.
     def name
-      File.basename(Dir["#{APPLET_DIR}/*Meta.lua"].first).split("Meta").first
+      File.basename(Dir["#{DIR}/*Meta.lua"].first).split("Meta").first
     end
 
     def squeezeplay_applet_dir
