@@ -10,28 +10,16 @@ menu item is selected and shows the departure info. Simples.
 
 # Requirements #
 
-* Ruby, Rubygems, and the Bundler gem for the server
 * You must [enable remote login on the Squeezeplay device](http://wiki.slimdevices.com/index.php/SqueezePlay_Applets#Manual_installation). Make a note of the IP address and the password
 
 # Install #
 
-    git clone https://github.com/textgoeshere/mulberry.git
+    git clone https://github.com/textgoeshere/mulberry-squeezeplay-client.git
 
     # scp the applet to the device (you can use IP or hostname here)
     rake applet:install device=HOSTNAME_OF_SQUEEZEPLAY_DEVICE server=HOSTNAME_OF_SERVER
 
-    # Setup server
-    bundle install
-
-    # Start server daemon
-    cd public
-    thin -A file -d start
-
-    # Fetch some data and write the JSON
-    rake mulberry:update
-
-    # Example crontab entry to update data every 2 minutes
-    # */2 * * * * bash -l -c 'cd $PATH_TO_MULBERRY && bundle exec rake mulberry:update'
+Install the server-side app at https://github.com/textgoeshere/mulberry-server.
 
 Now restart (power cycle) the Squeezeplay device.
 
@@ -42,7 +30,7 @@ list of travel services and departure times.
 
 First [build SqueezeOS](http://wiki.slimdevices.com/index.php/SqueezePlay_Build_Instructions).
 
-Then, in the `mulberry` directory:
+Then, in the `mulberry-squeezeplay-client` directory:
 
     rake applet:dev:ln squeezeplay_path=$YOUR_PATH_TO_SQUEEZEPLAY
 
@@ -54,6 +42,3 @@ directory. The applet will then be loaded when Squeezeplay is restarted.
 
 You have to restart Squeezeplay every time you make a change to the
 Lua source.
-
-Look in `data.yml` and the content of `lib/sources` to see how to
-customize the scrapers.
