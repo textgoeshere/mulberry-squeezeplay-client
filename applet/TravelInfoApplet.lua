@@ -35,7 +35,6 @@ local RequestJsonRpc   = require("jive.net.RequestJsonRpc")
 local SocketHttp       = require("jive.net.SocketHttp")
 local jnt              = jnt
 local json             = json
-local http             = SocketHttp(jnt, "127.0.0.1", 3000, "travelinfo")
 
 local require          = require
 local tostring         = tostring
@@ -49,12 +48,13 @@ oo.class(_M, Applet)
 function menu(self, menuItem)
    local window = Window("window", "Travel")
    local menu   = SimpleMenu("menu")
+   local http   = SocketHttp(jnt, self:getSettings()["url"], self:getSettings()["port"], "travelinfo")
 
    -- create a sink to receive JSON
    local function mySink(t, err)
       if err then
          log:error("Could not load TravelInfo data")
-         local textarea = Textarea("text", ("Sorry, I couldn't load the list of services"))
+         local textarea = Textarea("text", ("Sorry, I couldn't load the list of services\n" .. self:getSettings()["debug"]))
          window:addWidget(textarea)
       elseif t then
          for _, entry in pairs(t) do
@@ -100,7 +100,7 @@ function showEntry(self, entry)
       if err then
          log:error("Could not load TravelInfo data")
          -- TODO: show error message
-         textarea:setValue("Sorry, I couldn't load travel info for this service")
+         textarea:setValue("Sorry, I couldn't load travel info for this service\n" .. self:getSettings()["debug"])
       elseif t then
          local e = t[entry.source]
          if e then
@@ -113,13 +113,13 @@ function showEntry(self, entry)
             end
             textarea:setValue(e.description .. "\n\n----\n" .. e.departures .. "\n\n----\nUpdated " .. age_str)
          else
-            textarea:setvalue("Sorry, there is no travel info for this service")
+            textarea:setvalue("Sorry, there is no travel info for this service\n" .. self:getSettings()["debug"])
          end
       end
       window:addWidget(textarea)
       window:show()
    end
 
-   local myRequest = RequestJsonRpc(mySink, ('/data.json'))
+   local myRequest = RequestJsonRpc(mySink, self:getSettings()["path"])
    http:fetch(myRequest)
 end
