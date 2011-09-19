@@ -15,7 +15,7 @@ namespace :applet do
     if ENV["device"].nil? || ENV["device"].empty?
       raise "Usage: rake applet:install device=HOSTNAME_OF_SQUEEZEPLAY_DEVICE"
     end
-    puts %x[scp -r -v #{Applet::DIR}/* #{ENV['device']}:/usr/share/jive/applets/#{Applet.name}]
+    puts %x[scp -r -v #{Applet::DIR}/* root@#{ENV['device']}:/usr/share/jive/applets/#{Applet.name}]
   end
 end
 
