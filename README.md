@@ -1,6 +1,8 @@
 This is an applet for Squeezeplay devices (e.g. controllers and
 radios), part of the [Squeezebox/SqueezeOS family of devices](http://www.logitech.com/en-us/speakers-audio/wireless-music-systems). 
 
+![](https://github.com/textgoeshere/mulberry-squeezeplay-client/raw/master/docs/menu.png "Menu")
+
 It shows how you can write a a bit of Lua to consume and display
 realtime-ish data from a JSON endpoint. With nice icons.
 
